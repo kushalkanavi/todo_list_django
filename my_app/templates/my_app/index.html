@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>To-do-List | Index</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+  <center>
+    <h1>Welcome to To - Do - List Page</h1>
+
+    <br>
+    <br>
+    <br>
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+      Add Task
+    </button>
+    <a href="{%url 'app:index'%}"><input type="button" class="btn btn-primary" value="Reset"></a>
+
+    <br>
+    <br>
+
+    <form action="{%url 'app:tasksearch'%}" method="POST">
+      {% csrf_token %}
+      <input id="search_text" type="text" name="search" placeholder="Enter Title of Task to Search" style="margin-right: 0px; padding-right: 50px" />
+      <input class="btn btn-lng btn-danger" id="" type="Submit" value="Search" style="margin-right: 20px;"/>
+    </form>
+
+    <br>
+
+    <form action="{%url 'app:taskfilter'%}" method="POST">
+      {% csrf_token %}
+     <div class="form-group">
+      <label for="sel1">Select Date Range :    </label>
+      <select class="form-group" name="filter">
+        <option value="today">Today</option>
+        <option value="thisweek">This Week</option>
+        <option value="nextweek">Next Week</option>
+        <option value="overdue">Over Due</option>
+      </select>
+    </div> 
+    <input class="btn btn-lng btn-danger" id="" type="Submit" value="Filter"/>
+  </form>
+
+  {% if srch %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="text-align: center;">Title</th>
+        <th style="text-align: center;">Description</th>
+        <th style="text-align: center;">Due Date</th>
+        <th style="text-align: center;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in srch %}
+      <tr>
+        <td style="text-align: center;">{{ s.Title }}</td>
+        <td style="text-align: center;">{{ s.Description }}</td>
+        <td style="text-align: center;">{{ s.Due_Date }}</td>
+        {% if t.Due_Date > todayDate %}
+        <td style="text-align: center; color:green;">Pending</td>
+        {% else %}
+        <td style="text-align: center; color:red;">Completed</td>
+      </tr>
+      {% endif %}{% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</center>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Form to Add Task</h4>
+      </div>
+      <form method="POST" action="{% url 'app:saveTaskInfo' %}">
+        {% csrf_token %}
+
+        <div class="modal-body">
+          {{ form }}
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+<br>
+
+<center>
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="text-align: center;">Title</th>
+        <th style="text-align: center;">Description</th>
+        <th style="text-align: center;">Due Date</th>
+        <th style="text-align: center;">Status</th>
+        <th style="text-align: center;"></th>
+        <th style="text-align: center;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in task %}
+      <tr>
+        <td style="text-align: center;">{{ t.Title }}</td>
+        <td style="text-align: center;">{{ t.Description }}</td>
+        <td style="text-align: center;">{{ t.Due_Date }}</td>
+        {% if t.Due_Date > todayDate %}
+        <td style="text-align: center; color:green;">Pending</td>
+        {% else %}
+        <td style="text-align: center; color:red;">Completed</td>
+        {% endif %}
+        <td style="text-align: center;">
+          <a href="{% url 'app:edittask' id=t.id %}"><input type="button" name="" value="Edit"></a>
+        </td>
+        <td style="text-align: center;">
+          <input type="button" name="" value="Add Sub Task">
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</center>
+
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+  
+</script>
+
+</body>
+</html>
